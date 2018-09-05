@@ -32,7 +32,7 @@ Use it at your own risk.
 
 - [ ] Docs (API)
 
-## Note
+## Note
 
 Requires the use of cookies by default. This behavior can be overriden with the `verify` parameter.
 
