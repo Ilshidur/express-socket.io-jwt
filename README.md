@@ -159,7 +159,7 @@ SOFTWARE.
 [devdependency-url]: https://david-dm.org/ilshidur/express-socket.io-jwt#info=devDependencies
 [build-badge]: https://travis-ci.org/Ilshidur/express-socket.io-jwt.svg
 [build-url]: https://travis-ci.org/Ilshidur/express-socket.io-jwt
-[maintainability-badge]: https://api.codeclimate.com/v1/badges/TOKEN/maintainability
+[maintainability-badge]: https://api.codeclimate.com/v1/badges/1a591845db8b23c4cd06/maintainability
 [maintainability-url]: https://codeclimate.com/github/Ilshidur/express-socket.io-jwt/maintainability
 [downloads-badge]: https://img.shields.io/npm/dt/express-socket.io-jwt.svg
 [downloads-url]: https://www.npmjs.com/package/express-socket.io-jwt
