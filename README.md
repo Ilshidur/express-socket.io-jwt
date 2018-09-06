@@ -40,9 +40,27 @@ Requires the use of cookies by default. This behavior can be overriden with the 
 
 **Socket.io version >= 2.0**
 
-## Example
+## Examples
 
-**Server :**
+### Simple example
+
+```javascript
+const express = require('express');
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
+const socketAuth = require('express-socket.io-jwt');
+
+const socketMiddleware = socketAuth.createMiddleware(io, {
+  // Set a static JWT secret :
+  secret: 'JWT_SECRET',
+});
+
+app.get('/ROUTE', socketMiddleware({ required: true }), /* ... */);
+
+server.listen(3000);
+```
+
+### Full example
 
 ```javascript
 const express = require('express');
