@@ -94,7 +94,7 @@ const socketMiddleware = socketAuth.createMiddleware(io, {
 app.get('/ROUTE', socketMiddleware({ required: true, verify: () => true }), async (req, res, next) => {
   // Extract the associated Socket of the request
   const socket = req.getSocket();
-  const payload = await socket.getPayload();
+  const payload = await socket.payload;
   socket.emit('hello', `Hit to /ROUTE from ${payload.whateverProperty}`);
 
   // ...
