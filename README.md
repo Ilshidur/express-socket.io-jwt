@@ -14,7 +14,7 @@
 
 > Express + Socket.io synchronization. Use socket in your express routes.
 
-## Status
+## Status
 
 This is more a proof of concept than an actual package at the moment and is not entirely tested for great scaling.
 Use it at your own risk.
@@ -30,7 +30,7 @@ Use it at your own risk.
 
 ## TODOs
 
-[ ] Docs (API)
+- [ ] Docs (API)
 
 ## Note
 
