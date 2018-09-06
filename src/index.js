@@ -34,20 +34,12 @@ const authenticateSocketMiddleware =
       return next(err);
     }
 
-    io.of('/').clients((err, clients) => { console.log(err, clients) });
-    console.log(Object.keys(io.of('/').sockets).length);
-
-    console.log(Object.keys(io.sockets.connected).length);
-    console.log(sockets);
-
     if (Object.values(sockets).length === 0 && required) {
       return next(new Error('Unauthorized'));
     }
 
     const validateSockets = Object.keys(sockets).map(async (connectionName) => {
       const socket = sockets[connectionName];
-
-      console.log(socket.payload);
 
       if (socket && !socket.token && required) {
         throw new Error('Unauthorized');
@@ -90,7 +82,6 @@ async function parseSocketJwt(socket, { jwtFromRequest, secret, connectionNameFr
 }
 
 const defaultOnSocketParseError = (err, socket, next) => {
-  console.error(err); // TODO: Remove
   return next(new Error('Could not decode socket token'));
 }
 
