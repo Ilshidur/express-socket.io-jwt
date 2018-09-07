@@ -12,7 +12,7 @@
 
 [![NPM][npm-stats-badge]][npm-stats-url]
 
-> Express + Socket.io synchronization. Use socket in your express routes.
+> Express + Socket.io synchronization. Use sockets in your express routes with `req.getSocket()`.
 
 ## Status
 
@@ -55,7 +55,7 @@ const socketMiddleware = socketAuth.createMiddleware(io, {
   secret: 'JWT_SECRET',
 });
 
-app.get('/ROUTE', socketMiddleware({ required: true }), /* ... */);
+app.get('/ROUTE', socketMiddleware({ required: true }), /* req.getSocket() ... */);
 
 server.listen(3000);
 ```
