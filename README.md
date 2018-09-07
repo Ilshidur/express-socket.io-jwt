@@ -12,7 +12,7 @@
 
 [![NPM][npm-stats-badge]][npm-stats-url]
 
-> Express + Socket.io synchronization. Use sockets in your express routes with `req.getSocket()`.
+> Express + Socket.io synchronization using JWT. Use sockets in your express routes with `req.getSocket()`.
 
 ## Status
 
@@ -89,6 +89,8 @@ const socketMiddleware = socketAuth.createMiddleware(io, {
     console.error(err);
     return next(new Error('Could not decode socket token'));
   },
+  // Optional : check if a HTTP request comes from the same user browser that holds the socket
+  verify: (req, socket) => req.cookies ? req.cookies.io === socket.id : false,
 });
 
 app.get('/ROUTE', socketMiddleware({ required: true, verify: () => true }), async (req, res, next) => {
