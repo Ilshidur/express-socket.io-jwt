@@ -139,7 +139,7 @@ Middleware adding the `req.getSocket()` method, allowing the use of the client's
     * argument `req` (express `Request`) : user request
     * argument `socket` (socket.io `Socket`) : user socket.io connection
 
-### `req.getSocket([connectionName])
+### `req.getSocket([connectionName])`
 
 *TODO*
 
