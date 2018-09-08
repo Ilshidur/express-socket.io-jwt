@@ -28,10 +28,6 @@ Use it at your own risk.
 * Handles multiple sockets for 1 HTTP request
 * Supports both cookies & LocalStorage from client
 
-## TODOs
-
-- [ ] Docs (API)
-
 ## Note
 
 Requires the use of cookies by default. This behavior can be overriden with the `verify` parameter.
@@ -89,8 +85,6 @@ const socketMiddleware = socketAuth.createMiddleware(io, {
     console.error(err);
     return next(new Error('Could not decode socket token'));
   },
-  // Optional : check if a HTTP request comes from the same user browser that holds the socket
-  verify: (req, socket) => req.cookies ? req.cookies.io === socket.id : false,
 });
 
 app.get('/ROUTE', socketMiddleware({ required: true, verify: () => true }), async (req, res, next) => {
@@ -104,6 +98,50 @@ app.get('/ROUTE', socketMiddleware({ required: true, verify: () => true }), asyn
 
 server.listen(3000);
 ```
+
+## API
+
+```javascript
+const socketAuth = require('express-socket.io-jwt');
+```
+
+### `socketAuth#createMiddleware(io, opts)`
+
+Initializes a new middleware function.
+
+*Returns a new middleware function `socketMiddleware()`.*
+
+**Arguments :**
+
+* `io` (**required**, Socket.io `Server`) : the socket.io server
+* `opts` (**optional**, `object`, default `{}`) : optional initialization options
+  * `secret` (**required**, `String`|`function(req)`) : the JWT secret string. If passed a `function`, will execute it with the express request as argument.
+    * argument `req` (express `Request`) : user request
+  * `jwtFromRequest` (`function({ cookie, queryParams }, socket)`) : extracts the JWT from the socket connection's cookies or query parameters.
+    * argument `cookie` (`object`) : user's cookies passed in the socket connection
+    * argument `queryParams` (`object`) : query parameters passed in the socket connection initialization string
+  * `connectionNameFromRequest` (`function({ cookie, queryParams }, socket)`) : extracts the "connection name" from the socket connection's cookies or query parameters. The connection name is set by the socket.io client and allows the handling of multiple socket.io connections for 1 user with `req.getSocket([connectionName])`.
+    * argument `cookie` (`object`) : user's cookies passed in the socket connection
+    * argument `queryParams` (`object`) : query parameters passed in the socket connection initialization string
+  * `onSocketParseError` (`function(err, socket, next)`) : *TODO*
+
+### `socketMiddleware(opts)`
+
+Middleware adding the `req.getSocket()` method, allowing the use of the client's socket in express routes.
+
+*Returns a new middleware, ready to be used.*
+
+**Arguments :**
+
+* `opts` (**optional** ,default `{}`) : optional initialization options
+  * `required` (`Boolean`, default `true`) : if `true`, throws an error if the route is accessed without a corresponding socket connection
+  * `verify` (`function(req, socket) => Boolean|String`) : check if a HTTP request comes from the same user browser that holds the socket. By default, returns `true` if the `req` and `socket` cookie matches. If `required` is set to `false`, the middleware will not throw and still call `next()`.
+    * argument `req` (express `Request`) : user request
+    * argument `socket` (socket.io `Socket`) : user socket.io connection
+
+### `req.getSocket([connectionName])
+
+*TODO*
 
 ## Scaling
 
