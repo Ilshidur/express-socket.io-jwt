@@ -1,5 +1,16 @@
 # express-socket.io-jwt - change log
 
+## 0.1.3 (Sept. 10th 2018)
+
+### Breaking changes
+
+* new `match` option
+* removed `verify` option
+
+### Minor
+
+* More docs in the README
+
 ## 0.1.2 (Sept. 8th 2018)
 
 * More docs in the README
