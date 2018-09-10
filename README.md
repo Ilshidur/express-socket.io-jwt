@@ -26,11 +26,7 @@ Use it at your own risk.
 * Compatible with Socket.io adapters
 * Compatible with Socket.io sticky sessions
 * Handles multiple sockets for 1 HTTP request
-* Supports both cookies & LocalStorage from client
-
-## Note
-
-Requires the use of cookies by default. This behavior can be overriden with the `verify` parameter.
+* Compatible with cookies & LocalStorage use
 
 ## Compatibility
 
@@ -113,7 +109,7 @@ Initializes a new middleware function.
 
 **Arguments :**
 
-* `io` (**required**, Socket.io `Server`) : the socket.io server
+* `io` (**required**, Socket.io `Server`) : the socket.io server. Throws an error if not set.
 * `opts` (**optional**, `object`, default `{}`) : optional initialization options
   * `secret` (**required**, `String`|`function(req)`) : the JWT secret string. If passed a `function`, will execute it with the express request as argument.
     * argument `req` (express `Request`) : user request
