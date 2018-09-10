@@ -27,7 +27,7 @@ cluster((cb) => {
     connectionNameFromRequest: ({ queryParams }) => queryParams.name,
   });
 
-  app.get('/test', socketMiddleware({ required: true, verify: () => true }), async (req, res) => {
+  app.get('/test', socketMiddleware({ matchSocket: (req, socket) => req.headers['X-User-Id'] === socket.handshake.headers['X-User-Id'] }), async (req, res) => {
     console.log(`HIT ${uuid}`);
     const socket1 = req.getSocket('electron-app');
     if (!socket1) {

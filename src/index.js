@@ -1,59 +1,64 @@
 const jwt = require('jsonwebtoken');
 const { isEqual: ipEquals } = require('ip');
 
+// Default input functions
 const defaultJwtFromRequest = ({ cookie, queryParams }) => cookie.jwt || queryParams.token;
 const defaultConnectionNameFromRequest = () => null;
-const defaultVerify = (req, socket) => req.cookies ? req.cookies.io === socket.id : false;
-
-// TODO: const compare = (req, socket)
-function getSocketsFromIp(namespace, ip) {
-  return Object.keys(namespace.connected)
-    // .filter((socketId) => {
-    //   const socket = namespace.connected[socketId];
-    //   console.log(socket.handshake.address, ip, ipEquals(socket.handshake.address, ip));
-    //   return ipEquals(socket.handshake.address, ip);
-    // })
-    .reduce((acc, socketId) => {
-      const socket = namespace.connected[socketId];
-      return { ...acc, [socket.connectionName]: socket };
-    }, {});
+const defaultOnSocketParseError = (err, socket, next) => {
+  return next(new Error('Could not decode socket token'));
 }
+
+const indexSockets = sockets => sockets.reduce((acc, socketId) => {
+  const socket = namespace.connected[socketId];
+  return { ...acc, [socket.connectionName]: socket };
+}, {});
 
 const authenticateSocketMiddleware =
   io =>
   ({
-    verify = defaultVerify,
+    matchSocket = 'ip',
     required = true,
   }) =>
   async (req, res, next) => {
+    function filterSockets(req, namespace, filterFunc) {
+      return Object.values(namespace.connected).filter(socket => filterFunc(req, socket));
+    }
+
     let sockets;
     try {
       const namespace = io.of('/');
-      sockets = getSocketsFromIp(namespace, req.ip);
+
+      switch (matchSocket) {
+        case 'ip':
+          sockets = filterSockets(req, namespace, (req, socket) => ipEquals(req.ip, socket.handshake.address));
+          break;
+        case 'cookie':
+          sockets = filterSockets(req, namespace, (req, socket) => req.cookies ? req.cookies.io === socket.id : false);
+          break;
+        default:
+          sockets = filterSockets(req, namespace, matchSocket);
+      }
+      console.log(sockets);
     } catch (err) {
       return next(err);
     }
 
-    if (Object.values(sockets).length === 0 && required) {
+    if (sockets.length === 0 && required) {
       return next(new Error('Unauthorized'));
     }
 
-    const validateSockets = Object.keys(sockets).map(async (connectionName) => {
-      const socket = sockets[connectionName];
+    const indexedSockets = indexSockets(sockets);
+
+    const validateSockets = sockets.map(async (socket) => {
+      if (!required) {
+        return;
+      }
 
       if (socket && !socket.token && required) {
         throw new Error('Unauthorized');
       }
 
-      // const payload = await socket.getPayload();
-      const payload = socket.payload;
-      if (socket && !payload && required) {
-        throw new Error('Unauthorized');
-      }
-
-      const verified = await verify(req, socket);
-
-      if (socket && !verified && required) {
+      if (socket && !socket.payload && required) {
         throw new Error('Unauthorized');
       }
     });
@@ -64,7 +69,7 @@ const authenticateSocketMiddleware =
       return next(err);
     }
 
-    req.getSocket = (connection) => connection ? sockets[connection] : Object.values(sockets)[0];
+    req.getSocket = (connection) => connection ? indexedSockets[connection] : sockets[0];
 
     next();
   };
@@ -81,16 +86,18 @@ async function parseSocketJwt(socket, { jwtFromRequest, secret, connectionNameFr
   socket.connectionName = await connectionNameFromRequest({ cookie, queryParams }, socket);
 }
 
-const defaultOnSocketParseError = (err, socket, next) => {
-  return next(new Error('Could not decode socket token'));
-}
-
 const socketMiddleware = ({
   secret,
   jwtFromRequest = defaultJwtFromRequest,
   connectionNameFromRequest = defaultConnectionNameFromRequest,
   onSocketParseError = defaultOnSocketParseError,
-}) => async (socket, next) => {
+} = {}) => async (socket, next) => {
+  if (!secret) {
+    const err = new Error('Cannot decode socket JWT because secret is missing in the server');
+    onSocketParseError(err, socket, next);
+    return;
+  }
+
   try {
     await parseSocketJwt(socket, { secret, jwtFromRequest, connectionNameFromRequest });
   } catch (err) {
@@ -101,7 +108,11 @@ const socketMiddleware = ({
 };
 
 // TODO: Allow choice of namespaces to '.use' (string or function)
-const createMiddleware = (io, opts) => {
+const createMiddleware = (io, opts = {}) => {
+  if (!io) {
+    return next(new Error('Missing socket.io server'));
+  }
+
   io.use(socketMiddleware(opts));
   return authenticateSocketMiddleware(io);
 };
