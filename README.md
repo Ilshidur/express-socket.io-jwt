@@ -164,21 +164,6 @@ app.use(socketAuth.io(...));
 sticky.listen(server, 3001);
 ```
 
-## Multiple sockets per HTTP request
-
-Will match any socket connection to a HTTP request by their IP.
-Further verification can be implemented through the option `verify`.
-
-```javascript
-verify: (req, socket) => {
-  // Using http authentication middleware:
-  return req.user.id === socket.payload.user.id;
-  // In order to differenciate multiple sockets for one single user :
-  // If a string is returned, the socket can be retrieved in Express with req.getSocket('RETURNED STRING')
-  return req.user.id === socket.payload.user.id ? socket.getConnectionName() : false;
-}
-```
-
 ## License
 
 MIT License
