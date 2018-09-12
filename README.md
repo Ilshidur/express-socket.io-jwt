@@ -123,6 +123,8 @@ Initializes a new middleware function.
     * argument `queryParams` (`object`) : query parameters passed in the socket connection initialization string
   * `onSocketParseError` (`function(err, socket, next)`) : *TODO*
 
+<hr />
+
 ```javascript
 const socketMiddleware = socketAuth.createMiddleware(/* opts */);
 ```
@@ -140,6 +142,8 @@ Middleware adding the `req.getSocket()` method, allowing the use of the client's
   * `matchSocket` (`String|function(req, socket) => Boolean`) : check if a HTTP request comes from the same user browser that holds the socket. By default, returns `true` if the `req` and `socket` IP matches. If `required` is set to `false`, the middleware will not throw and still call `next()`. Allowed values : `'ip'`, `'cookie'` or a function.
     * argument `req` (express `Request`) : user request
     * argument `socket` (socket.io `Socket`) : user socket.io connection
+
+<hr />
 
 ```javascript
 app.get('/ROUTE', socketMiddleware(), (req, res, next) => {
