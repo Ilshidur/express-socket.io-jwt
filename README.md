@@ -83,7 +83,7 @@ const socketMiddleware = socketAuth.createMiddleware(io, {
   },
 });
 
-app.get('/ROUTE', socketMiddleware({ required: true, verify: () => true }), async (req, res, next) => {
+app.get('/ROUTE', socketMiddleware({ required: true, matchSocket: 'ip' }), async (req, res, next) => {
   // Extract the associated Socket of the request
   const socket = req.getSocket();
   const payload = await socket.payload;
@@ -131,7 +131,7 @@ Middleware adding the `req.getSocket()` method, allowing the use of the client's
 
 * `opts` (**optional** ,default `{}`) : optional initialization options
   * `required` (`Boolean`, default `true`) : if `true`, throws an error if the route is accessed without a corresponding socket connection
-  * `verify` (`function(req, socket) => Boolean|String`) : check if a HTTP request comes from the same user browser that holds the socket. By default, returns `true` if the `req` and `socket` cookie matches. If `required` is set to `false`, the middleware will not throw and still call `next()`.
+  * `matchSocket` (`String|function(req, socket) => Boolean`) : check if a HTTP request comes from the same user browser that holds the socket. By default, returns `true` if the `req` and `socket` IP matches. If `required` is set to `false`, the middleware will not throw and still call `next()`. Allowed values : `'ip'`, `'cookie'` or a function.
     * argument `req` (express `Request`) : user request
     * argument `socket` (socket.io `Socket`) : user socket.io connection
 
