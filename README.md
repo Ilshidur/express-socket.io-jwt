@@ -47,7 +47,9 @@ const socketMiddleware = socketAuth.createMiddleware(io, {
   secret: 'JWT_SECRET',
 });
 
-app.get('/ROUTE', socketMiddleware({ required: true }), /* req.getSocket() ... */);
+app.get('/ROUTE', socketMiddleware(), (req, res, next) => {
+  // const userSocket = req.getSocket() ...
+});
 
 server.listen(3000);
 ```
@@ -121,6 +123,10 @@ Initializes a new middleware function.
     * argument `queryParams` (`object`) : query parameters passed in the socket connection initialization string
   * `onSocketParseError` (`function(err, socket, next)`) : *TODO*
 
+```javascript
+const socketMiddleware = socketAuth.createMiddleware(/* opts */);
+```
+
 ### `socketMiddleware(opts)`
 
 Middleware adding the `req.getSocket()` method, allowing the use of the client's socket in express routes.
@@ -129,15 +135,27 @@ Middleware adding the `req.getSocket()` method, allowing the use of the client's
 
 **Arguments :**
 
-* `opts` (**optional** ,default `{}`) : optional initialization options
+* `opts` (**optional**, default `{}`) : optional initialization options
   * `required` (`Boolean`, default `true`) : if `true`, throws an error if the route is accessed without a corresponding socket connection
   * `matchSocket` (`String|function(req, socket) => Boolean`) : check if a HTTP request comes from the same user browser that holds the socket. By default, returns `true` if the `req` and `socket` IP matches. If `required` is set to `false`, the middleware will not throw and still call `next()`. Allowed values : `'ip'`, `'cookie'` or a function.
     * argument `req` (express `Request`) : user request
     * argument `socket` (socket.io `Socket`) : user socket.io connection
 
+```javascript
+app.get('/ROUTE', socketMiddleware(), (req, res, next) => {
+  // const userSocket = req.getSocket() ...
+});
+```
+
 ### `req.getSocket([connectionName])`
 
-*TODO*
+Gets a single socket associated to the user. The socket is validated through the `matchSocket` parameter of `socketMiddleware(opts)`.
+
+*Returns a socket.io `Socket`. If no socket is found and the `required` parameter is falsy, returns `undefined`.*
+
+**Arguments :**
+
+* `connectionName` (**optional**, default `undefined`) : get a socket initiated with a connection name and passed to `connectionNameFromRequest()`.
 
 ## Scaling
 
