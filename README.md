@@ -176,10 +176,11 @@ const redisAdapter = require('socket.io-redis');
 const sticky = require('sticky-session');
 
 const app = express();
+const socketMiddleware = socketAuth.createMiddleware(io);
 
 io.adapter(redisAdapter({ host: 'localhost', port: 6379 }));
 
-app.use(socketAuth.io(...));
+app.use(socketMiddleware());
 
 // [ Routes ... ]
 
