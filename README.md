@@ -65,12 +65,6 @@ const socketAuth = require('express-socket.io-jwt');
 const socketMiddleware = socketAuth.createMiddleware(io, {
   // Set a static JWT secret :
   secret: 'JWT_SECRET',
-  // or providing dynamic JWT secret :
-  secret: (req) => {
-    // Can be useful to sign tokens with dynamic token, thus allowing easy invalidation.
-    // e.g.: sign with a user password hash to invalidate when they change their password
-    return `JWT_SECRET_${req.user.passwordHash}`;
-  },
   // Optional : extracts the JWT from the socket request
   jwtFromRequest: ({ cookie, queryParams }, socket) => {
     return cookie.jwt; // For cookie usage
@@ -113,8 +107,7 @@ Initializes a new middleware function.
 
 * `io` (**required**, Socket.io `Server`) : the socket.io server. Throws an error if not set.
 * `opts` (**optional**, `object`, default `{}`) : optional initialization options
-  * `secret` (**required**, `String`|`function(req)`) : the JWT secret string. If passed a `function`, will execute it with the express request as argument.
-    * argument `req` (express `Request`) : user request
+  * `secret` (**required**, `String`) : the JWT secret string.
   * `jwtFromRequest` (`function({ cookie, queryParams }, socket)`) : extracts the JWT from the socket connection's cookies or query parameters.
     * argument `cookie` (`object`) : user's cookies passed in the socket connection
     * argument `queryParams` (`object`) : query parameters passed in the socket connection initialization string
