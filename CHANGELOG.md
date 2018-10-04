@@ -1,5 +1,16 @@
 # express-socket.io-jwt - change log
 
+## 0.2.0 (Oct. 4th 2018)
+
+### Breaking changes
+
+* Removed dynamic `secret` option
+
+### Minor
+
+* Refactored
+* Removed console.log
+
 ## 0.1.3 (Sept. 10th 2018)
 
 ### Breaking changes
