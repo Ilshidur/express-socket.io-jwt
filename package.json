@@ -27,7 +27,7 @@
     "jsonwebtoken": "^8.3.0"
   },
   "devDependencies": {
-    "express": "4.16.3",
+    "express": "4.16.4",
     "socket.io": "2.1.1",
     "socket.io-client": "2.1.1",
     "socket.io-redis": "5.2.0",
