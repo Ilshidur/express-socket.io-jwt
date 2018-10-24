@@ -120,6 +120,7 @@ const createMiddleware = (io, opts = {}) => {
     throw new Error('Missing socket.io server');
   }
 
+  // TODO: Remove this side effect and make the function pure
   io.use(socketMiddleware(opts));
   return authenticateSocketMiddleware(io);
 };
