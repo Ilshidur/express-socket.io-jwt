@@ -1,6 +1,6 @@
 workflow "Deployment" {
   on = "push"
-  resolves = ["\"npm pu"]
+  resolves = ["npm publish"]
 }
 
 action "Filters for GitHub Actions" {
@@ -8,7 +8,7 @@ action "Filters for GitHub Actions" {
   args = "branch master"
 }
 
-action "\"npm pu" {
+action "npm publish" {
   uses = "actions/npm@c555744"
   needs = ["Filters for GitHub Actions"]
   args = "publish --access public"
