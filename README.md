@@ -1,6 +1,7 @@
 # express-socket.io-jwt
 
 ![stability-unstable](https://img.shields.io/badge/stability-unstable-yellow.svg)
+[![Build Status][build-badge]][build-url]
 
 [![npm version][version-badge]][version-url]
 [![Known Vulnerabilities][vulnerabilities-badge]][vulnerabilities-url]
@@ -204,6 +205,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
+[build-badge]: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2FIlshidur%2FIlshidur/express-socket.io-jwt%2Fbadge&style=flat
+[build-url]: https://actions-badge.atrox.dev/Ilshidur/Ilshidur/express-socket.io-jwt/goto
 [version-badge]: https://img.shields.io/npm/v/express-socket.io-jwt.svg
 [version-url]: https://www.npmjs.com/package/express-socket.io-jwt
 [vulnerabilities-badge]: https://snyk.io/test/npm/express-socket.io-jwt/badge.svg
