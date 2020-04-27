@@ -33,6 +33,6 @@
     "socket.io-redis": "5.2.0",
     "sticky-cluster": "0.3.5",
     "sticky-session": "1.1.2",
-    "uuid": "3.4.0"
+    "uuid": "7.0.3"
   }
 }
