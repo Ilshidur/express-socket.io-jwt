@@ -24,7 +24,7 @@
   "homepage": "https://github.com/Ilshidur/express-socket.io-jwt#README",
   "dependencies": {
     "ip": "^1.1.5",
-    "jsonwebtoken": "^8.3.0"
+    "jsonwebtoken": "^9.0.0"
   },
   "devDependencies": {
     "express": "4.17.1",
